@@ -12,43 +12,43 @@ def Solve():
     print("3nd yara")
 def iterations():
     
-        tk.Label(window, text="Enter Number of iterations").grid(column=2,row=7)
-        no=tk.Entry(window ,width=10).grid(column=3,row=7)
+        tk.Label(window, text="Enter Number of iterations").grid(column=1,row=8)
+        no=tk.Entry(window ,width=10).grid(column=2,row=8)
         print(no.get())
 def relError():
     
-        tk.Label(window, text="Enter Absolute relative error").grid(column=2,row=7)
-        er=tk.Entry(window ,width=10).grid(column=3,row=7)
+        tk.Label(window, text="Enter Absolute relative error").grid(column=1,row=9)
+        er=tk.Entry(window ,width=10).grid(column=2,row=9)
         
 def call():
     method=dropdown.get()
     if(method=="Gauss Jordan"):
         Gauss_Jordan()
     elif(method=="Jacobi"):
-        tk.Label(window, text="Enter initial guess").grid(column=2,row=4)
+        tk.Label(window, text="Enter initial guess").grid(column=1,row=5)
         ini=tk.Entry(window ,width=10)
-        ini.grid(column=3,row=4)
+        ini.grid(column=2,row=5)
         print(ini.get())
         rad1 = Radiobutton(window,text='Number of iterations', value=1, command=iterations)
         rad2 = Radiobutton(window,text='Relative error', value=2,command=relError)
-        rad1.grid(column=3, row=5)
-        rad2.grid(column=3, row=6) 
+        rad1.grid(column=2, row=6)
+        rad2.grid(column=2, row=7) 
     elif(method=="Gauss Elimination"):
         gauss_pivot()
     elif(method=="Gauss Seidel"):
-        tk.Label(window, text="Enter initial guess").grid(column=2,row=4)
+        tk.Label(window, text="Enter initial guess").grid(column=1,row=5)
         ini=tk.Entry(window ,width=10)
-        ini.grid(column=3,row=4)
+        ini.grid(column=2,row=5)
         print(ini.get())
         rad1 = Radiobutton(window,text='Number of iterations', value=1, command=iterations)
         rad2 = Radiobutton(window,text='Relative error', value=2,command=relError)
-        rad1.grid(column=3, row=5) 
-        rad2.grid(column=3, row=6) 
+        rad1.grid(column=2, row=6) 
+        rad2.grid(column=2, row=7) 
     elif(method=="LU decomposition"):
-        tk.Label(window, text="Choose the form you want").grid(column=2,row=5)
+        tk.Label(window, text="Choose the form you want").grid(column=1,row=5)
         dropdownLU=Combobox(window)
         dropdownLU['values']=("Downlittle Form ", "Crout Form", "Cholesky Form ")
-        dropdownLU.grid(column=4,row=5)
+        dropdownLU.grid(column=2,row=5)
         form=dropdownLU.get()
 #creating window 
 window = tk.Tk()
