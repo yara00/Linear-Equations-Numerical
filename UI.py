@@ -1,6 +1,15 @@
 import tkinter as tk
 from tkinter.ttk import *
-i=2  #first equ in row 2 so the counter of rows starts with two
+LISTS=[]
+def Solve():
+    #function yara &mariam
+    
+    number=int(t.index('end').split('.')[0])-1
+    print(int(t.index('end').split('.')[0])-1)
+    LISTS=t.get(0.0, 'end-1c').split("\n") #That's the line you need
+    
+    print(LISTS)
+    print("3nd yara")
 def iterations():
     
         tk.Label(window, text="Enter Number of iterations").grid(column=2,row=7)
@@ -10,12 +19,7 @@ def relError():
     
         tk.Label(window, text="Enter Absolute relative error").grid(column=2,row=7)
         er=tk.Entry(window ,width=10).grid(column=3,row=7)
-def addEquation():
-    global i
-    i=i+1
-    equation = tk.Entry(window,width=20)
-    equation.grid(column=1, row=i,pady=(10, 10))
-            
+        
 def call():
     method=dropdown.get()
     if(method=="Gauss Jordan"):
@@ -56,20 +60,20 @@ lbl.grid(column=0, row=0)
 #lbl.pack()
 
 
-tk.Label(window, text="Enter your equations" , font=("Arial Bold", 20)).grid(column=0,row=2)
-equations = tk.Entry(window,width=20)
-equations.grid(column=1,row=2)
-btnadd=tk.Button(window,text="Add new equation",font=("Arial Bold", 15 ),bg="white",fg="blue", width=15 ,command=addEquation)
-btnadd.grid(column=2, row=2,pady=(2, 2))
+tk.Label(window, text="Enter your equations" , font=("Arial Bold", 20)).grid(column=0,row=1)
+t = tk.Text(window, width=30, height=10 ,yscrollcommand=set() ,bd=9 ,font=("Arial Bold", 18 ))
+t.focus()
+t.grid(column=1,row=1)
+end=tk.Button(window,text="Solve",font=("Arial Bold", 15 ),bg="white",fg="blue", width=15 ,command=Solve)
+end.grid(column=2,row=2,pady=(2,2))
+
 
 meth = tk.Label(window, text="Choose method to solve your equations",  font=("Arial Bold", 20))
-meth.grid(column=0,row=1)
+meth.grid(column=0,row=4)
 dropdown=Combobox(window)
 dropdown['values']=("Gauss Elimination", "Gauss Jordan", "Gauss Seidel", "LU decomposition", "Jacobi")
-dropdown.grid(column=1,row=1)
+dropdown.grid(column=1,row=4)
 btn = tk.Button(window, text="Submit", font=("Arial Bold", 15 ),bg="white" ,fg="red", width=12 ,command=call)
-btn.grid(column=2, row=1)
-
-    
+btn.grid(column=2, row=4)
 
 window.mainloop()
