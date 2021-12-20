@@ -1,4 +1,13 @@
 
+import numpy as np
+from numpy import linalg as LA
+
+def normCalc(xnew, xold):
+  ea = np.subtract(xnew,xold)
+  for i in range(len(xnew)):
+    ea[i] = ea[i]/xnew[i]
+  return LA.norm(ea)
+
 def gaussSeidel(intialGuess, A, b, maxIterations, Es):
    old = [0 for i in range(len(intialGuess))]
    k=1
@@ -18,13 +27,9 @@ def gaussSeidel(intialGuess, A, b, maxIterations, Es):
 
 
        if (k != 1):
-               for y in range(0, len(old)):
-                   Ea = abs((intialGuess[y] - old[y]) / intialGuess[y])
-                   print(old)
-                   print(intialGuess)
-                   print(Ea)
-                   if (Ea <= Es ):
 
+                   Ea = normCalc(intialGuess,old)
+                   if (Ea <= Es ):
                        return intialGuess
        k=k+1
    return intialGuess
