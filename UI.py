@@ -66,8 +66,11 @@ t.focus()
 t.grid(column=1,row=1)
 end=tk.Button(window,text="Solve",font=("Arial Bold", 15 ),bg="white",fg="blue", width=15 ,command=Solve)
 end.grid(column=2,row=2,pady=(2,2))
-
-
+choose = tk.Label(window, text="Choose the number of significant figures",  font=("Arial Bold", 20))
+choose.grid(column=0,row=6)
+significantDown=Combobox(window)
+significantDown['values']=("1","2","3","4","5")
+significantDown.grid(column=1,row=6)
 meth = tk.Label(window, text="Choose method to solve your equations",  font=("Arial Bold", 20))
 meth.grid(column=0,row=4)
 dropdown=Combobox(window)
