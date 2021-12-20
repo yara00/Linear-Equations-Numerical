@@ -14,12 +14,9 @@ class InputValidator():
     for i in self.equations:
       matchings = re.findall(r'[\w]+', i)
       for j in matchings:
-        if j.isalnum() and not j.isnumeric(): 
-          for k in range(0, len(j)):
-            if j[k].isnumeric():
-              j = j[k+1: len(j)]
-            if j[k].isalpha():
-              break
+        if j.isalnum() and not j.isnumeric():
+          while j[0].isnumeric():
+             j = j[1: len(j)]
           self.variables.add(j)
         
     self.variables = sorted(list(self.variables))
@@ -33,7 +30,7 @@ class InputValidator():
       self.equations[i] = self.equations[i].replace(" ", "")
       for j in range(len(self.variables)-1,-1,-1):
         self.equations[i] = re.sub(self.variables[j], self.alpha[j], self.equations[i])
-    print(self.equations)
+    variables = set()
 
   def __handleMultipleSigns(coef, sign):
     if coef == '+' and sign == '-':
@@ -52,19 +49,11 @@ class InputValidator():
       coef = self.handleMultipleSigns(coef, self.equations[i][j] )
     elif self.equations[i][j] != "=" or (self.equations[i][j] == "=" and coef != ""):
       if equalFlag == 0 or self.equations[i][j] == "=":
-        if "/" in coef:
-          try: self.b[i] -= float(sum(Fraction(s) for s in coef.split()))
-          except: return "error"
-        else:
-          try : self.b[i] -= float(coef)
-          except: return "error"
+        try : self.b[i] -= eval(coef)
+        except: return "error"
       else:
-        if "/" in coef:
-          try:  self.b[i] += float(sum(Fraction(s) for s in coef.split()))
-          except: return "error"
-        else:
-          try : self.b[i] += float(coef)
-          except: return "error"
+        try : self.b[i] += eval(coef)
+        except: return "error"
       if self.equations[i][j] != "=":
         coef = self.equations[i][j]
       else:
@@ -77,19 +66,11 @@ class InputValidator():
       coef = coef + "1"
     if coef != "":
       if equalFlag == 0:
-        if "/" in coef:
-          try: self.coefArr[i][var] += float(sum(Fraction(s) for s in coef.split()))
-          except: return "error"
-        else:
-          try :self.coefArr[i][var] += float(coef)
-          except: return "error"
+        try :self.coefArr[i][var] += eval(coef)
+        except: return "error"
       else :
-        if "/" in coef:
-          try: self.coefArr[i][var] -= float(sum(Fraction(s) for s in coef.split()))
-          except: return "error"
-        else:
-          try :self.coefArr[i][var] -= float(coef)
-          except: return "error"
+        try :self.coefArr[i][var] -= eval(coef)
+        except: return "error"
     return ""
   validOperations = [".", "-", "+", "/", "="]
   def __handleErrors(self):
@@ -114,7 +95,7 @@ class InputValidator():
           coef =  self.__handleCoefAssignment(i, j, coef,  equalFlag, self.equations[i][j])
       if coef != "":
         try:
-          self.b[i] += float(coef)
+          self.b[i] += eval(coef)
         except:
           return 1
     return 0
@@ -126,4 +107,3 @@ class InputValidator():
       return error, self.coefArr, self.b
     error = self.__handleErrors()
     return error, self.coefArr, self.b
- 
