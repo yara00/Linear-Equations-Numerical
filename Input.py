@@ -11,6 +11,7 @@ class InputValidator():
   alpha ="abcdefghijklmnopqrstuvwxyz"
   equations = []
   def __variablesParser(self):
+    self.variables = set()
     for i in self.equations:
       matchings = re.findall(r'[\w]+', i)
       for j in matchings:
@@ -30,7 +31,7 @@ class InputValidator():
       self.equations[i] = self.equations[i].replace(" ", "")
       for j in range(len(self.variables)-1,-1,-1):
         self.equations[i] = re.sub(self.variables[j], self.alpha[j], self.equations[i])
-    variables = set()
+   
 
   def __handleMultipleSigns(coef, sign):
     if coef == '+' and sign == '-':
@@ -104,6 +105,6 @@ class InputValidator():
     self.__variablesParser()
     error = self.__formatVariables()
     if error == 1:
-      return error, self.coefArr, self.b
+      return error, self.coefArr, self.b, self.variables
     error = self.__handleErrors()
-    return error, self.coefArr, self.b
+    return error, self.coefArr, self.b, self.variables
