@@ -30,7 +30,7 @@ def extractL(compressed):
   L = np.identity(n) #identity --> diagonals = 1
   for i in range(1,n):
     for j in range(0,i):
-      print(compressed[i,j])
+      #print(compressed[i,j])
       L[i,j] = float(compressed[i,j])
   return L
 
@@ -94,7 +94,6 @@ def crout(A, b):
           summationU += L[i, s] * U[s, j]
         U[i, j] = (A[i, j] - summationU) / L[i, i]
 
-  L, U = crout(A)
   d = forward_substitution(L,b)
   x = backward_substitution(U,d) #final solution
   return L, U, x
@@ -116,5 +115,5 @@ def chelosky(A, b):
         L[i,j] = (A[i,j] - summation) / L[j,j]
   U = L.transpose() #set U to L transpose
   d = forward_substitution(L, b)
-  x = backward_substitution(U, d) #final solution
+  x = round(backward_substitution(U, d),3) #final solution
   return L, U, x;
