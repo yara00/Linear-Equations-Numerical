@@ -75,7 +75,7 @@ def doolittle(A, b):
   x = backward_substitution(U, d)
   return L, U, x
 
-def crout(A):
+def crout(A, b):
   n = len(A)
   L = np.zeros((n, n)) #set L to zeros
   U = np.identity(n) #set U to indentity matrix of same length as A
