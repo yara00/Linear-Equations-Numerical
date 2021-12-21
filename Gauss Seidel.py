@@ -8,9 +8,10 @@ def normCalc(xnew, xold):
     ea[i] = ea[i]/xnew[i]
   return LA.norm(ea)
 
-def gaussSeidel(intialGuess, A, b, maxIterations, Es):
+def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
    old = [0 for i in range(len(intialGuess))]
    k=1
+   L=0
    while k < maxIterations:
 
        for z in range(len(intialGuess)):
@@ -21,18 +22,20 @@ def gaussSeidel(intialGuess, A, b, maxIterations, Es):
            value = b[i]
            for j in range (0,len(A)):
                if(j!=i):
-                    value=value-A[i][j]*intialGuess[j]
-           value = value / A[i][i]
+                    value=round(value-A[i][j]*intialGuess[j],prec)
+           if(A[i][i]==0):
+               L=1
+               return intialGuess,L
+           value =round(value / A[i][i],prec)
            intialGuess[i]=value
-
 
        if (k != 1):
 
                    Ea = normCalc(intialGuess,old)
                    if (Ea <= Es ):
-                       return intialGuess
+                       return intialGuess,L
        k=k+1
-   return intialGuess
+   return intialGuess,L
 
 intialGuess = [1,1,1]
 A = [[4,2,1],
@@ -41,4 +44,5 @@ A = [[4,2,1],
 b = [11, 3,16]
 maxIterations = 3
 Es = 0.0001
-print(gaussSeidel(intialGuess,A,b,maxIterations,Es))
+prec =2
+print(gaussSeidel(intialGuess,A,b,maxIterations,Es,prec))
