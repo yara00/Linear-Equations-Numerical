@@ -89,7 +89,7 @@ def crout(A, b, sigFigs):
         L[j,i] = A[j,i] - summationL
         L[j,i] = round(L[j,i], sigFigs)
     #setting U matrix
-      for j in range(i+1,3):
+      for j in range(i+1,n):
         summationU = 0
         for k in range(0,i):
           summationU += L[i,k] * U[k,j]
@@ -108,7 +108,7 @@ def chelosky(A, b, sigFigs):
         if(i==j): #diagonal
           summation = 0
           for k in range(j):
-            summation+= L[i,k]**2
+            summation+= math.pow(L[i,k],2)
           L[i,j] = np.sqrt(A[i,j]-summation)
           L[i,j] = round(L[i,j], sigFigs)
         else: #others
