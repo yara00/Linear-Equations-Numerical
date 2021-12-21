@@ -10,17 +10,18 @@ def jacobi(x, A, b ,tol ,maxIteraions, precision):
         if i == j:
           sum = round(sum + b[i], precision)
         if i != j:
-          sum = round(sum - round(x[j]*A[i][j], precision), precision) 
+          sum = round(sum - round(x[j]*A[i][j], precision), precision)
+      if A[i][i] == 0:
+        return x, 1
       x_new[i] = round(sum/round(A[i][i], precision), precision)
     #Ea calculations
     ea = normCalc(x_new, x)
-    print("ea", ea)
     if(ea < tol):
-      return x_new
+      return x_new, 0
       break;
     x = x_new
-    print(x_new)
-  return x
+  return x, 0
+
 
       
 def normCalc(xnew, xold):
