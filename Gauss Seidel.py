@@ -12,6 +12,20 @@ def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
    old = [0 for i in range(len(intialGuess))]
    k=1
    L=0
+   n = len(A)
+
+   # Traverse through all array elements
+   for i in range(n):
+
+       # Last i elements are already in place
+       for j in range(0, n - i - 1):
+
+           # traverse the array from 0 to n-i-1
+           # Swap if the element found is greater
+           # than the next element
+           if A[j][0] < A[j + 1][0]:
+               A[j][0], A[j + 1][0] = A[j + 1][0], A[j][0]
+   print(A)
    while k < maxIterations:
 
        for z in range(len(intialGuess)):
@@ -39,8 +53,8 @@ def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
 
 intialGuess = [1,1,1]
 A = [[4,2,1],
-     [-1,2,0],
-     [2,1,4]]
+     [-1,0,0],
+     [2,0,4]]
 b = [11, 3,16]
 maxIterations = 3
 Es = 0.0001
