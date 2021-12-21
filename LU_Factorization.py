@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def forward_substitution(L, b):
+def forward_substitution(L, b, sigFigs):
   n = len(L)
   x = np.zeros(n)
   x[0] = b[0] / L[0,0]
@@ -9,18 +9,18 @@ def forward_substitution(L, b):
     temp = b[i]
     for j in range(i):
       temp = temp - (L[i,j] * x[j])
-    x[i] = temp / L[i,i]
+    x[i] = round(temp / L[i,i], sigFigs)
     #print(x)
   return x 
 
-def backward_substitution(U, b):
+def backward_substitution(U, d, sigFigs):
   n = len(U)
   x = np.zeros(n)
   for i in range(n-1, -1, -1):
-      temp = b[i]
+      temp = d[i]
       for j in range(i+1, n):
           temp -= U[i,j] * x[j]
-      x[i] = round(temp / U[i,i],3)
+      x[i] = round(temp / U[i,i], sigFigs)
     #print(x)
   return x
   
@@ -47,7 +47,7 @@ def extractU(compressed):
   return U
 
  #doolittle method
-def doolittle(A, b):
+def doolittle(A, b,sigFigs):
   n = len(A)
   U = np.zeros((n, n)) #set U to zeros
   L = np.identity(n) #set L to identity matrix of same length as A
@@ -63,57 +63,63 @@ def doolittle(A, b):
 
       #decomposing A to copmact representaion
     for k in range(i+1,n):          
-      A[k,i] = A[k,i]/A[i,i]      
+      A[k,i] = round(A[k,i]/A[i,i], sigFigs)      
       for j in range(i+1,n):      
-        A[k,j] -= A[k,i]*A[i,j] 
+        A[k,j] -= round(A[k,i]*A[i,j], sigFigs) 
     #extract A to L,U and solve by forward then backward substition
   L = extractL(A)
   U = extractU(A)
   #Ld=b
-  d = forward_substitution(L, b)
+  d = forward_substitution(L, b,sigFigs)
   #Ux=d
-  x = backward_substitution(U, d)
+  x = backward_substitution(U, d,sigFigs)
   return L, U, x
 
-def crout(A, b):
+def crout(A, b, sigFigs):
   n = len(A)
   L = np.zeros((n, n)) #set L to zeros
   U = np.identity(n) #set U to indentity matrix of same length as A
 
   for i in range(0, n):
     #setting L matrix
-      for j in range(i, n):
+      for j in range(i,n):
         summationL = 0
-        for s in range(0,j):
-          summationL += L[j, s] * U[s, i]
-        L[j, i] = A[j, i] - summationL
+        for k in range(0,j):
+          summationL += L[j,k] * U[k,i]
+        L[j,i] = A[j,i] - summationL
+        L[j,i] = round(L[j,i], sigFigs)
     #setting U matrix
-      for j in range(i+1, 3):
+      for j in range(i+1,3):
         summationU = 0
-        for s in range(0,i):
-          summationU += L[i, s] * U[s, j]
-        U[i, j] = (A[i, j] - summationU) / L[i, i]
+        for k in range(0,i):
+          summationU += L[i,k] * U[k,j]
+        U[i,j] = (A[i,j] - summationU) / L[i, i]
+        U[i,j] = round(U[i,j], sigFigs)
+  d = forward_substitution(L,b,sigFigs)
+  x = backward_substitution(U,d,sigFigs) #final solution
+  return 0, L, U, x
 
-  d = forward_substitution(L,b)
-  x = backward_substitution(U,d) #final solution
-  return L, U, x
-
-def chelosky(A, b):
-  n = len(A)
-  L = np.zeros((n, n)) #set L to zeros of same length as A
-  for j in range(n): #cols
-    for i in range(j,n): #rows
-      if(i==j): #diagonal
-        summation = 0
-        for k in range(j):
-          summation+= L[i,k]**2
-        L[i,j] = np.sqrt(A[i,j]-summation)
-      else: #others
-        summation = 0
-        for k in range(j):
-          summation += L[i,k]*L[j,k]
-        L[i,j] = (A[i,j] - summation) / L[j,j]
-  U = L.transpose() #set U to L transpose
-  d = forward_substitution(L, b)
-  x = round(backward_substitution(U, d),3) #final solution
-  return L, U, x;
+def chelosky(A, b, sigFigs):
+  if(np.all(np.abs(A-A.T) < 1e-8)):  #check symmetry with transpose by tolerance:
+    n = len(A)
+    L = np.zeros((n, n)) #set L to zeros of same length as A
+    for j in range(n): #cols
+      for i in range(j,n): #rows
+        if(i==j): #diagonal
+          summation = 0
+          for k in range(j):
+            summation+= L[i,k]**2
+          L[i,j] = np.sqrt(A[i,j]-summation)
+          L[i,j] = round(L[i,j], sigFigs)
+        else: #others
+          summation = 0
+          for k in range(j):
+            summation += L[i,k]*L[j,k]
+          L[i,j] = (A[i,j] - summation) / L[j,j]
+          L[i,j] = round(L[i,j], sigFigs)
+    U = L.transpose() #set U to L transpose
+    d = forward_substitution(L, b, sigFigs)
+    x = round(backward_substitution(U, d), sigFigs) #final solution
+    return 0,L, U, x;
+  else:
+    return 1,0,0,0
