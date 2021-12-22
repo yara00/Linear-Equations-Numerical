@@ -1,6 +1,7 @@
 
 import numpy as np
 from numpy import linalg as LA
+import time
 
 def normCalc(xnew, xold):
   ea = np.subtract(xnew,xold)
@@ -8,10 +9,11 @@ def normCalc(xnew, xold):
     ea[i] = ea[i]/xnew[i]
   return LA.norm(ea)
 
-def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
+def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec,startTime):
    old = [0 for i in range(len(intialGuess))]
    k=1
    L=0
+   runTime=0
    n = len(A)
 
    # Traverse through all array elements
@@ -47,9 +49,13 @@ def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
 
                    Ea = normCalc(intialGuess,old)
                    if (Ea <= Es ):
-                       return intialGuess,L
+                        end = time.time()
+                        runtime=end-startTime
+                        return intialGuess,L,runtime
        k=k+1
-   return intialGuess,L
+   end = time.time()
+   runtime = end - startTime
+   return intialGuess,L,runtime
 
 intialGuess = [1,1,1]
 A = [[4,2,1],
@@ -59,4 +65,4 @@ b = [11, 3,16]
 maxIterations = 3
 Es = 0.0001
 prec =2
-print(gaussSeidel(intialGuess,A,b,maxIterations,Es,prec))
+print(gaussSeidel(intialGuess,A,b,maxIterations,Es,prec,startTime=4))

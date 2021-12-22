@@ -1,6 +1,9 @@
 import numpy as np
 import re
+import time
 from fractions import Fraction
+
+
 class InputValidator():
   def __init__(self, equations):
         self.equations = equations
@@ -102,6 +105,7 @@ class InputValidator():
     return 0
   
   def validation(self):
+    
     self.__variablesParser()
     error = self.__formatVariables()
     if error == 1:
