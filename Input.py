@@ -108,10 +108,10 @@ class InputValidator():
   def validation(self):
     """
     function for validations and extraction coeffecient array and b values
-    :return: ِerror : 0 no error , 1  = Invalid input , 2 = number of equations != number of variables
-           : A : coeffecient matrix
-           : b : b matrix 
-           : variables : variables order.
+    :return: ِerror : integer 0 = no error , 1  = Invalid input , 2 = number of equations != number of variables
+           : A : array contains coeffecient matrix
+           : b : array contains b matrix 
+           : variables : list contains variables order.
     """ 
     self.__variablesParser()
     error = self.__formatVariables()
