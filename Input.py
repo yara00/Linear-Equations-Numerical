@@ -21,7 +21,7 @@ class InputValidator():
           self.variables.add(j)
         
     self.variables = sorted(list(self.variables))
-    if len(self.variables) != len(self.equations): return 1
+    if len(self.variables) != len(self.equations): return 2
     self.coefArr = np.zeros(shape=(len(self.variables),len(self.variables)))
     self.b = np.zeros(len(self.variables))
     return 0
@@ -104,7 +104,7 @@ class InputValidator():
   def validation(self):
     self.__variablesParser()
     error = self.__formatVariables()
-    if error == 1:
+    if error == 2:
       return error, self.coefArr, self.b, self.variables
     error = self.__handleErrors()
     return error, self.coefArr, self.b, self.variables
