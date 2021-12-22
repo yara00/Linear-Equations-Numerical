@@ -9,7 +9,8 @@ def normCalc(xnew, xold):
     ea[i] = ea[i]/xnew[i]
   return LA.norm(ea)
 
-def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec,startTime):
+def gaussSeidel(intialGuess, A, b, maxIterations, Es,prec):
+   startTime=time.time()
    old = [0 for i in range(len(intialGuess))]
    k=1
    L=0
