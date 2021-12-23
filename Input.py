@@ -1,9 +1,6 @@
 import numpy as np
 import re
-import time
 from fractions import Fraction
-
-
 class InputValidator():
   def __init__(self, equations):
         self.equations = equations
@@ -13,6 +10,7 @@ class InputValidator():
   b = []
   alpha ="abcdefghijklmnopqrstuvwxyz"
   equations = []
+  # helper function that extracts the variables from the equations
   def __variablesParser(self):
     self.variables = set()
     for i in self.equations:
@@ -24,18 +22,19 @@ class InputValidator():
           self.variables.add(j)
         
     self.variables = sorted(list(self.variables))
-    if len(self.variables) != len(self.equations): return 1
     self.coefArr = np.zeros(shape=(len(self.variables),len(self.variables)))
     self.b = np.zeros(len(self.variables))
     return 0
-
+  # helper function that change the varibles to an alphabet and remove any number associated with it.
   def __formatVariables(self):
+    if len(self.variables) != len(self.equations): return 2
     for i in range (0, len(self.equations)):
       self.equations[i] = self.equations[i].replace(" ", "")
       for j in range(len(self.variables)-1,-1,-1):
         self.equations[i] = re.sub(self.variables[j], self.alpha[j], self.equations[i])
+    return 0
    
-
+  # helper function to handle succeive postive and negative signs
   def __handleMultipleSigns(coef, sign):
     if coef == '+' and sign == '-':
       return '-'
@@ -43,7 +42,7 @@ class InputValidator():
       return '-'
     else:
       return '+'
-
+ # helper function to handle coeffecient values and its assignment to b values.
   def __handleCoefvalues(self, i,j, coef,  equalFlag):
     if self.equations[i][j] == "." or self.equations[i][j] == "/":
       return coef + self.equations[i][j]
@@ -63,7 +62,7 @@ class InputValidator():
       else:
         coef = ""    
     return coef
-
+ # helper function to handle assignment of coeffcient values to coeffcient array.
   def __handleCoefAssignment(self, i,j, coef, equalFlag, variable):
     var = ord(variable) - ord('a')
     if coef == '-' or coef == '+':
@@ -77,6 +76,7 @@ class InputValidator():
         except: return "error"
     return ""
   validOperations = [".", "-", "+", "/", "="]
+  # function for the  extraction coeffecient array and b values
   def __handleErrors(self):
     for i in range(0, len(self.equations)):
       coef = ""
@@ -86,6 +86,7 @@ class InputValidator():
           if equalFlag == 1: return 1
           equalFlag = 1
         if not self.equations[i][j].isalnum():
+          #handle invalid operations
           if not self.equations[i][j] in self.validOperations:
             return 1
           coef = self.__handleCoefvalues(i,j, coef,  equalFlag)
@@ -94,6 +95,9 @@ class InputValidator():
           coef = coef + self.equations[i][j]
           if coef == "error": return 1
         if self.equations[i][j].isalpha():
+          if j < len(self.equations[i])-1:
+            if self.equations[i][j+1] == '.': 
+              return 1
           if coef == "":
             coef = "1"
           coef =  self.__handleCoefAssignment(i, j, coef,  equalFlag, self.equations[i][j])
@@ -102,13 +106,22 @@ class InputValidator():
           self.b[i] += eval(coef)
         except:
           return 1
+      #No equal sign in the equation
+      if equalFlag == 0: return 1
     return 0
-  
+  # function for the  validations and extraction coeffecient array and b values
   def validation(self):
-    
+    """
+    function for validations and extraction coeffecient array and b values
+    :return: ِerror : 0 no error , 1  = Invalid input , 2 = number of equations != number of variables
+           : A : coeffecient matrix
+           : b : b matrix 
+           : variables : variables order.
+    """ 
     self.__variablesParser()
     error = self.__formatVariables()
-    if error == 1:
-      return error, self.coefArr, self.b, self.variables
+    print(error)
+    if error == 2:
+      return 2, self.coefArr, self.b, self.variables
     error = self.__handleErrors()
     return error, self.coefArr, self.b, self.variables
